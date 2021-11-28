@@ -5,7 +5,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 require_once(__DIR__."/main_config.php"); // this file will conatin all those configurations for the database
-require_once SITE_ROOT.'../vendor/autoload.php'; // composer
+require_once SITE_ROOT.'android/vendor/autoload.php'; // composer
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
