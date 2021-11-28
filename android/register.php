@@ -11,6 +11,7 @@ if (isset($_POST['savebtn'])) {
     $phone = $_POST['ph'];
     $email = $_POST['email'];
     $password = $_POST['password'];
+    $pass=password_hash($password, PASSWORD_BCRYPT);
     $select_chech = mysqli_query($con, "SELECT * FROM usertbl WHERE email='$email'");
     if (strpos($password,'@')==false && strpos($password,'%')== false) {
         $error = "Please use Either a @ or % symbol";
@@ -27,18 +28,17 @@ if (isset($_POST['savebtn'])) {
     } else{
         $status=1;
         $query = mysqli_query($con, "INSERT INTO `usertbl`(`Firstname`, `Lastname`, `phoneNumber`, `email`, `password`, `Status`) 
-        VALUES ('$firstname','$lastname','$phone','$email','$password','$status')");
-
+        VALUES ('$firstname','$lastname','$phone','$email','$pass','$status')");
         if ($query) {
-            $subject="User Account creation";
+        $subject="User Account creation";
      	$msg="Dear '".mysqli_real_escape_string($con, trim($_POST['fn']))."',<br><br> Your account was created successfully!<br> Regards,<br>,<br>ITSINDA PROGRAM ";
-     	$msg="";
-     	if(send_mail($subject,$msg,trim($_POST['email']))==1){
+     	send_mail($subject,$msg,trim($_POST['email']));
      		$msg="Message was sent to ".mysqli_real_escape_string($con,trim($_POST['email']))."";
-     	}
-        message("Account password created  successfully. Please login to continue!,<br>".$message."", "success");
+     	
+        message("Account password created  successfully. Please login to continue!,<br>".$msg."", "success");
         redirect($_SERVER['REQUEST_URI']);
        exit();
+       $msg="check your email";
         } else {
             $error = "Something went wrong . Please try again.";
         }
@@ -108,6 +108,11 @@ if (isset($_POST['savebtn'])) {
                                 </div>
                             </div>
                                     <form class="user" method="POST">
+                            <span class="login100-form-title p-b-43">
+                                Register to continue Login
+                                <?php check_message(); ?>
+                            </span>
+
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
                                     <label for="" class="control-label">First Name</label>

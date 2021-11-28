@@ -1,3 +1,32 @@
+<?php
+include 'includes/config.php';
+if (isset($_POST['savebtn'])) {
+    $title =mysqli_real_escape_string($con,$_POST['title']);
+    $schedule =mysqli_real_escape_string($con,$_POST['schedule']);
+    $description =mysqli_real_escape_string($con,$_POST['description']);
+    $checkquery = mysqli_query($con,"SELECT * FROM `eventtbl` WHERE title='".mysqli_real_escape_string($con,$_POST['title'])."'") or die(mysqli_error($con));
+     if (mysqli_num_rows($checkquery) > 0) {
+        message("Title is Aleady Added..","message");
+    }else {
+        $status =1;
+        $sql= mysqli_query($con,"INSERT INTO `eventtbl`(`title`, `Description`, `schedule`,`status`) 
+        VALUES ('$title','$description','$schedule','$status')") or die(mysqli_error($con));
+        message("Title is Added..","message");
+        if ($sql) {
+            # code...
+            message("Title is Added..","message");
+        }else {
+            message("There is samething went wrong","Error");
+        }
+    }
+
+}
+
+
+
+
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -110,6 +139,9 @@
                     <!-- Page Heading -->
                     <h1 class="h3 mb-2 text-gray-800">Events Table</h1>
                     <p class="mb-4">All Events registered Here</p>
+                    <span class="login100-form-title p-b-43">
+                                <?php check_message(); ?>
+                            </span>
                     <button class="btn btn-primary" data-toggle="modal" data-target="#addEventModal">
                         Add New Event
                     </button>
@@ -130,7 +162,7 @@
                                             <th>Event Title</th>
                                             <th>Event Schedule</th>
                                             <th>Event Added Date</th>
-                                            <th>Event Description date</th>
+                                            <th>Event Description</th>
                                             <th>Settings</th>
                                         </tr>
                                     </thead>
@@ -140,21 +172,31 @@
                                             <th>Event Title</th>
                                             <th>Event Schedule</th>
                                             <th>Event Added Date</th>
-                                            <th>Event Description date</th>
+                                            <th>Event Description</th>
                                             <th>Settings</th>
                                         </tr>
                                     </tfoot>
+                                    <?php
+                                            $query =mysqli_query($con,"SELECT * FROM `eventtbl` WHERE 1");
+                                            $number=1;
+                                            while ($row = mysqli_fetch_array($query)) {
+                                                ?>
                                     <tbody>
                                         <tr>
-                                            <td>01</td>
-                                            <td>Meeting</td>
-                                            <td>2011/04/25</td>
-                                            <td>2011/04/26</td>
-                                            <td>Hello world</td>
+                                            <td><?php echo $number?></td>
+                                            <td><?php echo $row['title']?></td>
+                                            <td><?php echo $row['schedule']?></td>
+                                            <td><?php echo $row['dateDate']?></td>
+                                            <td><?php echo $row['Description']?></td>
                                             <td>settings</td>
                                         </tr>
                                         
                                     </tbody>
+
+                                    <?php
+                                        $number+=1;
+                                    }
+                                    ?>
                                 </table>
                             </div>
                         </div>
@@ -176,7 +218,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                <form class="user">
+                <form class="user" method="POST">
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
                                     <label for="" class="control-label">Title</label>
@@ -185,7 +227,7 @@
                                     </div>
                                     <div class="col-sm-6">
                                     <label for="" class="control-label">Schedule</label>
-                                        <input type="date" class="form-control form-control-user" id="exampleLastName"
+                                        <input type="datetime-local" class="form-control form-control-user" id="exampleLastName"
                                             placeholder="Schedule" required name="schedule">
                                     </div>
                                     
