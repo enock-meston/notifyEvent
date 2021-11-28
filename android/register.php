@@ -1,3 +1,52 @@
+<?php
+
+include 'includes/config.php';
+// include 'send-email.php';
+$error = "";
+$msg = "";
+$subject="Proof of registration";
+if (isset($_POST['savebtn'])) {
+    $firstname = $_POST['fn'];
+    $lastname = $_POST['ln'];
+    $phone = $_POST['ph'];
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+    $select_chech = mysqli_query($con, "SELECT * FROM usertbl WHERE email='$email'");
+    if (strpos($password,'@')==false && strpos($password,'%')== false) {
+        $error = "Please use Either a @ or % symbol";
+        // echo "<script>alert('Please use Either a @ or % symbol...');</script>";
+        // return false;
+    }
+    else if (strlen($password) < 8) {
+        // echo "<script>alert('Password must be at least 8 characters long!...');</script>";
+        $error = "Password must be at least 8 characters long!";
+        // return false;
+    } 
+    else if (mysqli_num_rows($select_chech) > 0) {
+        echo "<script>alert('email is areald used! try again...');</script>";
+    } else{
+        $status=1;
+        $query = mysqli_query($con, "INSERT INTO `usertbl`(`Firstname`, `Lastname`, `phoneNumber`, `email`, `password`, `Status`) 
+        VALUES ('$firstname','$lastname','$phone','$email','$password','$status')");
+
+        if ($query) {
+            $subject="User Account creation";
+     	$msg="Dear '".mysqli_real_escape_string($con, trim($_POST['fn']))."',<br><br> Your account was created successfully!<br> Regards,<br>,<br>ITSINDA PROGRAM ";
+     	$msg="";
+     	if(send_mail($subject,$msg,trim($_POST['email']))==1){
+     		$msg="Message was sent to ".mysqli_real_escape_string($con,trim($_POST['email']))."";
+     	}
+        message("Account password created  successfully. Please login to continue!,<br>".$message."", "success");
+        redirect($_SERVER['REQUEST_URI']);
+       exit();
+        } else {
+            $error = "Something went wrong . Please try again.";
+        }
+    }
+}   
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,7 +58,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Admin Login</title>
+    <title>User Registration</title>
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -41,40 +90,56 @@
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">Register To Notify Event </h1>
                                     </div>
-                                    <form class="user">
+                                    <div class="row">
+                                <div class="col-sm-6">
+                                    <!---Success Message--->
+                                    <?php if ($msg) { ?>
+                                        <div class="alert alert-success" role="alert">
+                                            <strong>Well done!</strong> <?php echo htmlentities($msg); ?>
+                                        </div>
+                                    <?php } ?>
+
+                                    <!---Error Message--->
+                                    <?php if ($error) { ?>
+                                        <div class="alert alert-danger" role="alert">
+                                            <strong>Oh snap!</strong> <?php echo htmlentities($error); ?>
+                                        </div>
+                                    <?php } ?>
+                                </div>
+                            </div>
+                                    <form class="user" method="POST">
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
                                     <label for="" class="control-label">First Name</label>
                                         <input type="text" class="form-control form-control-user" id="exampleFirstName"
-                                            placeholder="First Name">
+                                            placeholder="First Name" name="fn">
                                     </div>
                                     <div class="col-sm-6">
                                     <label for="" class="control-label">Last Name</label>
                                         <input type="text" class="form-control form-control-user" id="exampleLastName"
-                                            placeholder="Last Name">
+                                            placeholder="Last Name" name="ln">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                 <label for="" class="control-label">Phone Number</label>
-                                    <input type="number" class="form-control form-control-user" id="exampleInputEmail"
-                                        placeholder="Phone Number">
+                                    <input type="text" class="form-control form-control-user" id="exampleInputEmail"
+                                        placeholder="Phone Number" name="ph">
                                 </div>
                                 <div class="form-group">
                                 <label for="" class="control-label">Email Address</label>
                                     <input type="email" class="form-control form-control-user" id="exampleInputEmail"
-                                        placeholder="Email Address">
+                                        placeholder="Email Address" name="email">
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
                                     <label for="" class="control-label">Password</label>
                                         <input type="password" class="form-control form-control-user"
-                                            id="exampleInputPassword" placeholder="Password">
+                                            id="exampleInputPassword" name="password" placeholder="Password">
                                     </div>
                                 </div>
                                 <input type="submit" name="savebtn" value="Register Me" class="btn btn-primary btn-user btn-block">
                                     
-                                </a>
-                                
+                            
                             </form>
                                 </div>
                             </div>
