@@ -11,5 +11,5 @@ defined('NOTIFY_KEY') ? null : define('NOTIFY_KEY','Enock@132'); // password her
 
 
 defined('DS') ? null : define('DS', DIRECTORY_SEPARATOR);
-defined('SITE_ROOT') ? null : define ('SITE_ROOT', $_SERVER['DOCUMENT_ROOT'].DS.'itsindaprogram/');
+defined('SITE_ROOT') ? null : define ('SITE_ROOT', $_SERVER['DOCUMENT_ROOT'].DS.'notifyevent/');
 defined('BASE_URL') ? null : define('BASE_URL','http://localhost:8080/notifyevent/android/'); // Base url for the project !!!!

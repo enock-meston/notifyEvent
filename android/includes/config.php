@@ -2,7 +2,7 @@
 /*  Just settings and db import and global variables..
 */
 require_once(__DIR__."/main_config.php"); // this file will conatin all those configurations for the database
-require_once SITE_ROOT.'vendor/autoload.php'; // composer
+require_once SITE_ROOT.'../vendor/autoload.php'; // composer
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
