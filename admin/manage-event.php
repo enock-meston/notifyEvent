@@ -188,7 +188,12 @@ if (isset($_POST['savebtn'])) {
                                             <td><?php echo $row['schedule']?></td>
                                             <td><?php echo $row['dateDate']?></td>
                                             <td><?php echo $row['Description']?></td>
-                                            <td>settings</td>
+                                            <td>
+                                                <a href="?id=<?php echo $row['id']?>" data-toggle="modal" data-target="#addParticipantsModal">
+                                                   Add Participants 
+                                                </a>
+                                                
+                                            </td>
                                         </tr>
                                         
                                     </tbody>
@@ -204,6 +209,54 @@ if (isset($_POST['savebtn'])) {
 
                 </div>
                 <!-- /.container-fluid -->
+                
+                <!--Add Event Modal-->
+                <div class="modal fade" id="addParticipantsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add Participants </h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                <form class="user" method="POST">
+                                <div class="form-group">
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                    <label for="" class="control-label">Participants</label>
+                                        <input type="text" class="form-control" value="<?php echo $_GET['id'];?>" id="exampleFirstName"
+                                             required  name="users">
+                                    </div>
+                                    
+                                </div>
+                            
+                                <input class="btn btn-primary" type="submit" value="Save Event" name="addbtn">
+                            </form>
+
+                </div>
+                
+                
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
                 <!--Add Event Modal-->
