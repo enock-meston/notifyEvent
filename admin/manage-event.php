@@ -48,7 +48,7 @@ $user_id=$users[$id]; // thid is the user id for the user
 
 }else{
 	// user have not selected any record....
-    message("No record selected, Please try again later!","Error");
+    message("No record selected, Please try again later!","error");
     redirect($_SERVER['REQUEST_URI']);
     exit();
 }
