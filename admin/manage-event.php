@@ -22,7 +22,39 @@ if (isset($_POST['savebtn'])) {
 
 }
 
+if(isset($_POST['addbtnev'])){ // save records
+$event_id=$_POST['event_id'];
+// php insert queries
+$users=$_POST['users'];
+$count_users=count($users);
 
+// Here you might pu the forign keys here.... or other for vartiables
+
+
+
+//
+ 
+if($count_users > 0){ // lets check if user have selected any person
+
+for($i=0; $i<$users; $i++){
+	//lets get user_id to be inseeted in the database
+$user_id=$users[$id]; // thid is the user id for the user
+
+/////////////////////////////?INSERT QUERY GOUES HERE
+
+
+
+} 
+
+}else{
+	// user have not selected any record....
+    message("No record selected, Please try again later!","Error");
+    redirect($_SERVER['REQUEST_URI']);
+    exit();
+}
+
+
+}
 
 
 
@@ -189,46 +221,10 @@ if (isset($_POST['savebtn'])) {
                                             <td><?php echo $row['dateDate']?></td>
                                             <td><?php echo $row['Description']?></td>
                                             <td>
-                                                <a href="?id=<?php echo $row['id']?>" data-toggle="modal" data-target="#<?php echo md5($row['id']);?>">
-                                                   Add Participants 
-                                                </a>
+                       <a href="#" data-toggle="modal" <a href="#" title="Click to add participants" data-toggle="modal" data-target="#AddParticipantModal" data-id="<?php echo $row['id']; ?>">
                                                 
                                              <!--Add Event Modal-->
-                <div class="modal fade" id="<?php echo md5($row['id']);?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add Participants </h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <?php echo md5($row['id']);?>
-                <form class="user" method="POST">
-                                <div class="form-group">
-                                    <div class="col-sm-6 mb-3 mb-sm-0">
-                                    <label for="" class="control-label">Participants</label>
-                                        <input type="text" class="form-control" value="<?php echo $row['id'];?>" id="exampleFirstName"
-                                             required  name="users">
-                                    </div>
-                                    
-                                </div>
-                            
-                                <input class="btn btn-primary" type="submit" value="Save Event" name="addbtn">
-                            </form>
-
-                </div>
-                
-                
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                </div>
-            </div>
-        </div>
-    </div>
-                                                
+                                   
                                             </td>
                                         </tr>
                                         
@@ -256,7 +252,41 @@ if (isset($_POST['savebtn'])) {
 
 
 
+                <div class="modal fade" id="AddParticipantModal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header bg-primary">
+              <h4 class="modal-title">Add Participant</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>          
+            <div class="modal-body">
 
+      <div class="fetched-data-AddParticipant"></div> 
+            </div>
+          </div>
+          </div>
+        </div> 
+        <script>
+
+ 
+$(document).ready(function(){
+     $('#AddParticipantModal').on('show.bs.modal', function (e) {
+         var rowid = $(e.relatedTarget).data('id');
+          
+         $.ajax({
+             type : 'post',
+             url : 'event_form.php', //Here you will fetch records 
+             data :  'rowid='+ rowid, //Pass $id
+             success : function(data){
+             $('.fetched-data-AddParticipant').html(data);//Show fetched data from database
+             }
+         });
+      });
+ });
+// all
+</script>
 
 
 
