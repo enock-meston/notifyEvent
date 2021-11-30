@@ -1,25 +1,40 @@
 
-<?php require_once('../../../config/config.php');  // CONECTION GOES HERE
-if(isset($_POST['rowid'])){ ?>
+<?php require_once('includes/config.php');  // CONECTION GOES HERE
+if(isset($_POST['rowid'])){ 
+     $query= mysqli_query($con,"SELECT * FROM `usertbl` WHERE 1");
+   
+    
+    ?>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 
     <form class="user" method="POST">
     <div class="form-group">
-        <div class="col-sm-6 mb-3 mb-sm-0">
+        <div class="col-sm-6">
         <label for="" class="control-label">Participants</label>
         <input type="hidden" name="event_id" value="<?php echo $row['rowid'];?>">
-       <select name="users[]" class="select2">
-           <option value="">-- Select users--</option>
-           <option value="1">User 1 from the loop </option>
-           <option value="2">User 2 from the loop</option>
-           <option value="3">User 3 from the loop</option>
+        <select name="users[]" class="js-example-basic-multiple form-control" multiple="multiple" style="width:100%;">
+            <option value="">-- Select users--</option>
+        <?php
+            while ($row = mysqli_fetch_array($query)) {
+                
+        ?>
+       
+           <option value="<?php echo $row['uid'];?>"><?php echo $row['Firstname'];?> - <?php echo $row['Lastname'];?></option>
         </div>
+        <?php
+            }
         
+        ?>
     </div>
-
+    <br><br>
+            <hr>
     <input class="btn btn-primary" type="submit" value="Save Event" name="addbtnev">
 </form>
 
 <?php
+
 }
 ?>
 <script>
@@ -28,4 +43,9 @@ if(isset($_POST['rowid'])){ ?>
    dropdownParent: $('#AddParticipantModal')
      
  });
+    </script>
+<script>
+        $(document).ready(function() {
+    $('.js-example-basic-multiple').select2();
+});
     </script>

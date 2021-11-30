@@ -27,25 +27,29 @@ $event_id=$_POST['event_id'];
 // php insert queries
 $users=$_POST['users'];
 $count_users=count($users);
-
 // Here you might pu the forign keys here.... or other for vartiables
-
-
 
 //
  
-if($count_users > 0){ // lets check if user have selected any person
+if(count($users) > 0){ // lets check if user have selected any person
 
-for($i=0; $i<$users; $i++){
+for($i=0; $i<$count_users; $i++){
 	//lets get user_id to be inseeted in the database
-$user_id=$users[$id]; // thid is the user id for the user
+$user_id=$_POST['users'][$i]; // thid is the user id for the user   // the error from array list
 
 /////////////////////////////?INSERT QUERY GOUES HERE
-
-
-
+    $status =1;
+$insert =mysqli_query($con,"INSERT INTO `settingtbl`(`user_id`, `event_id`, `status`) 
+VALUES ('$user_id','$event_id','1')");
+if (!$insert) {
+    message("successful setted","message");
+redirect($_SERVER['REQUEST_URI']) or die(mysqli_error($con));
+exit();
+}
 } 
-
+message("successful setted","message");
+redirect($_SERVER['REQUEST_URI']) or die(mysqli_error($con));
+exit();
 }else{
 	// user have not selected any record....
     message("No record selected, Please try again later!","error");
@@ -82,8 +86,9 @@ $user_id=$users[$id]; // thid is the user id for the user
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
     <!-- Custom styles for this page -->
     <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 </head>
 
 <body id="page-top">
@@ -221,7 +226,8 @@ $user_id=$users[$id]; // thid is the user id for the user
                                             <td><?php echo $row['dateDate']?></td>
                                             <td><?php echo $row['Description']?></td>
                                             <td>
-                       <a href="#" data-toggle="modal" <a href="#" title="Click to add participants" data-toggle="modal" data-target="#AddParticipantModal" data-id="<?php echo $row['id']; ?>">
+                       <a href="#" data-toggle="modal" title="Click to add participants" data-toggle="modal" 
+                       data-target="#AddParticipantModal" data-id="<?php echo $row['id']; ?>"> AddParticipant</a>
                                                 
                                              <!--Add Event Modal-->
                                    
@@ -360,6 +366,11 @@ $(document).ready(function(){
         <i class="fas fa-angle-up"></i>
     </a>
 
+    <script>
+        $(document).ready(function() {
+    $('.js-example-basic-multiple').select2();
+});
+    </script>
 
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
