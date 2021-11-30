@@ -146,6 +146,10 @@ if (isset($_POST['savebtn'])) {
                                     
                             
                             </form>
+                            <br>
+                            <hr>
+                            <br>
+                            <a href="login.php" class="btn btn-primary btn-user btn-block"> Back to Login</a>
                                 </div>
                             </div>
                         </div>

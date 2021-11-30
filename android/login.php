@@ -96,8 +96,12 @@ if (isset($_POST['loginbtn'])) {
                                         </div>
                                         
                                         <input type="submit" value="Login" name="loginbtn" class="btn btn-primary btn-user btn-block">
-                                          
+                                        <br>
+                                        <hr>
+                                        <br>
+                                        <a href="register.php" class="btn btn-primary btn-user btn-block"> New Account</a>
                                     </form>
+                                   
                                 </div>
                             </div>
                         </div>

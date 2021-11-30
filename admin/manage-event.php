@@ -23,7 +23,7 @@ if (isset($_POST['savebtn'])) {
 }
 
 if(isset($_POST['addbtnev'])){ // save records
-$event_id=$_POST['event_id'];
+$event_id=trim($_POST['event_id']); 
 // php insert queries
 $users=$_POST['users'];
 $count_users=count($users);
@@ -35,12 +35,27 @@ if(count($users) > 0){ // lets check if user have selected any person
 
 for($i=0; $i<$count_users; $i++){
 	//lets get user_id to be inseeted in the database
-$user_id=$_POST['users'][$i]; // thid is the user id for the user   // the error from array list
+$user_id= trim($_POST['users'][$i]) ; // thid is the user id for the user   // the error from array list
+
 
 /////////////////////////////?INSERT QUERY GOUES HERE
     $status =1;
 $insert =mysqli_query($con,"INSERT INTO `settingtbl`(`user_id`, `event_id`, `status`) 
 VALUES ('$user_id','$event_id','1')");
+// select email to send message
+$selectEmail = mysqli_query($con,"SELECT * from usertbl where uid='$user_id'");
+$row2 = mysqli_fetch_array($selectEmail);
+    $email =trim($row2['email']);
+    send_mail("New Event","Hello Dear "."<hr><br>"." ".$email."
+    <br>now you are invited to attend a new Event
+    <br> this invitation is from notifyEvent App 
+    <br> 
+    <strong>
+        So check your notify Event to Approve if you will attend or Not
+    <strong>
+    <br><br><br>
+    Thank !",$email);
+
 if (!$insert) {
     message("successful setted","message");
 redirect($_SERVER['REQUEST_URI']) or die(mysqli_error($con));
@@ -112,7 +127,7 @@ exit();
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="index.php">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
@@ -220,14 +235,15 @@ exit();
                                                 ?>
                                     <tbody>
                                         <tr>
-                                            <td><?php echo $number?></td>
-                                            <td><?php echo $row['title']?></td>
-                                            <td><?php echo $row['schedule']?></td>
-                                            <td><?php echo $row['dateDate']?></td>
-                                            <td><?php echo $row['Description']?></td>
+                                            <td><?php echo $number;?></td>
+                                            <td><?php echo $row['title'];?></td>
+                                            <td><?php echo $row['schedule'];?></td>
+                                            <td><?php echo $row['dateDate'];?></td>
+                                            <td><?php echo $row['Description'];?></td>
+                                            
                                             <td>
-                       <a href="#" data-toggle="modal" title="Click to add participants" data-toggle="modal" 
-                       data-target="#AddParticipantModal" data-id="<?php echo $row['id']; ?>"> AddParticipant</a>
+                       <a class="btn btn-success" href="#" data-toggle="modal" title="Click to add participants" data-toggle="modal" 
+                       data-target="#AddParticipantModal" data-id="<?php echo $row['id']; ?>"> Invite</a>
                                                 
                                              <!--Add Event Modal-->
                                    
@@ -251,13 +267,6 @@ exit();
                
 
 
-
-
-
-
-
-
-
                 <div class="modal fade" id="AddParticipantModal">
         <div class="modal-dialog">
           <div class="modal-content">
@@ -268,7 +277,7 @@ exit();
               </button>
             </div>          
             <div class="modal-body">
-
+            
       <div class="fetched-data-AddParticipant"></div> 
             </div>
           </div>

@@ -1,4 +1,16 @@
 <?php require_once('includes/config.php'); 
+error_reporting(0);
+if ($_GET['idyes']) {
+    $id = intval($_GET['idyes']);
+    $query = mysqli_query($con, "UPDATE settingtbl set status='2' where sid='$id'"); // 2 yes
+     message("now you said yes ! ","message");
+}
+
+if ($_GET['idno']) {
+    $id = intval($_GET['idno']);
+    $query = mysqli_query($con, "UPDATE settingtbl set status='3' where sid='$id'"); // 3 no
+     message("now you said No ! ","message");
+}
 
 ?>
 <!DOCTYPE html>
@@ -53,20 +65,23 @@
                                     <div class="row no-gutters align-items-center">
                                                     <!-- Basic Card Example -->
                                                     <?php
-                                                    $query =mysqli_query($con,"SELECT * FROM `usertbl` WHERE 1");
+                                                    $userid= $_SESSION['user_id'];
+                                                    $query =mysqli_query($con,"SELECT * FROM settingtbl,usertbl,eventtbl WHERE 
+                                                    settingtbl.user_id = usertbl.uid AND settingtbl.event_id=eventtbl.id 
+                                                    AND usertbl.uid='$userid' AND settingtbl.status=1");
                                                     $number=1;
                                                     while ($row = mysqli_fetch_array($query)) {
                                                         ?>
                                         <div class="card shadow mb-4">
                                             <div class="card-header py-3">
-                                                <h6 class="m-0 font-weight-bold text-primary"><?php echo $row['Firstname']; ?> - 
-                                                <?php echo $row['Lastname']; ?></h6>
+                                                <h6 class="m-0 font-weight-bold text-primary"><?php echo $row['title']; ?> At 
+                                                <?php echo $row['schedule']; ?></h6>
                                             </div>
                                             <div class="card-body">
-                                            <?php echo $row['email']; ?> 
+                                            <?php echo $row['Description']; ?> 
                                             <hr>
-                                            <a href="#" class="btn btn-primary">yes i will Attend</a>
-                                            <a href="#" class="btn btn-danger">No Attend</a>
+                                            <a href="dashboard.php?idyes=<?php echo $row['sid']?>" class="btn btn-primary">yes i will Attend</a> 
+                                            <a href="dashboard.php?idno=<?php echo $row['sid']?>" class="btn btn-danger">No Attend</a>
                                             </div>
                                            
                                         </div>
@@ -162,3 +177,4 @@
 </body>
 
 </html>
+                                        

@@ -1,3 +1,34 @@
+<?php
+
+require_once('admin/includes/config.php');
+
+if (isset($_POST['loginbtn'])) {
+	$username = $_POST['username'];
+	$passtxt = $_POST['password'];
+
+		$select = mysqli_query($con,"SELECT * FROM admintbl WHERE username='".trim($username)."' AND password='$passtxt'") or die(mysqli_error($con));
+	
+		if(mysqli_num_rows($select) ==1) {
+			$row=mysqli_fetch_array($select);
+			
+			$_SESSION['user_id']=$row['aid'];
+			$_SESSION['fname']=$row['username'];
+
+			// then after creating sessions lests redirect
+			redirect('admin/index.php');
+			exit();		
+			
+		}else{
+			// password does not match
+			message("Invalid user credintials , Please try again later!!", "alert");
+			redirect($_SERVER['REQUEST_URI']); // redirect to current urls
+	exit();	
+		}
+}
+
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -41,20 +72,20 @@
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
                                     </div>
-                                    <form class="user">
+                                    <form class="user" method="POST">
                                         <div class="form-group">
-                                            <input type="email" class="form-control form-control-user"
+                                            <input type="text" class="form-control form-control-user"
                                                 id="exampleInputEmail" aria-describedby="emailHelp"
-                                                placeholder="Enter Email Address...">
+                                                placeholder="Enter Username Address..." name="username">
                                         </div>
                                         <div class="form-group">
-                                            <input type="password" class="form-control form-control-user"
-                                                id="exampleInputPassword" placeholder="Password">
+                                            <input type="password" name="password" class="form-control form-control-user"
+                                                id="exampleInputPassword" placeholder="password">
                                         </div>
                                         
-                                        <a href="index.html" class="btn btn-primary btn-user btn-block">
-                                            Login
-                                        </a>
+                                        <input type="submit" name="loginbtn" value="Login" class="btn btn-primary btn-user btn-block">
+                                            
+                                        
                                     </form>
                                 </div>
                             </div>
