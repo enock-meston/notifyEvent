@@ -1,17 +1,21 @@
 <?php require_once('includes/config.php'); 
 error_reporting(0);
-if ($_GET['idyes']) {
-    $id = intval($_GET['idyes']);
-    $query = mysqli_query($con, "UPDATE settingtbl set status='2' where sid='$id'"); // 2 yes
-     message("now you said yes ! ","message");
-}
+session_start();
 
-if ($_GET['idno']) {
-    $id = intval($_GET['idno']);
-    $query = mysqli_query($con, "UPDATE settingtbl set status='3' where sid='$id'"); // 3 no
-     message("now you said No ! ","message");
+if (isset($_POST['sendbtn'])) {
+    # code...
+    $message = trim($_POST['comment']);
+    $from = $_SESSION['email'];
+    $status=1;
+    $sql=mysqli_query($con,"INSERT INTO `commenttbl`(`from`, `comments`, `status`) 
+    VALUES ('$from','$message','$status')");
+    if ($sql) {
+        # code...
+        message("seccussfully sent","message");
+    }else {
+        message("seccussfully sent","error");
+    }
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -61,39 +65,19 @@ if ($_GET['idno']) {
                         <div class="col-xl-3 col-md-6 mb-4">
                             
                                 <div class="card-body">
-                                    
-                                <h6 class="m-0 font-weight-bold text-primary">Events</h6>
+                                <h6 class="m-0 font-weight-bold text-primary">Ask For Help</h6>
+                                <hr>
                                     <div class="row no-gutters align-items-center">
-                                                    <!-- Basic Card Example -->
-                                                    <?php
-                                                    $userid= $_SESSION['user_id'];
-                                                    $query =mysqli_query($con,"SELECT * FROM settingtbl,usertbl,eventtbl WHERE 
-                                                    settingtbl.user_id = usertbl.uid AND settingtbl.event_id=eventtbl.id 
-                                                    AND usertbl.uid='$userid' AND settingtbl.status=1");
-                                                    $number=1;
-                                                    while ($row = mysqli_fetch_array($query)) {
-                                                        ?>
-                                        <div class="card shadow mb-4">
-                                            <div class="card-header py-3">
-                                                <h6 class="m-0 font-weight-bold text-primary"><?php echo $row['title']; ?> At 
-                                                <?php echo $row['schedule']; ?></h6>
+                                        <form class="form-inline" method="POST">
+                                            <div class="form-group">
+                                                <label for="comment">Write Your Message:</label>
+                                                <textarea class="form-control" rows="5" name="comment" id="comment"></textarea>
+                                                </div><br>
+                                                <input type="submit" name="sendbtn" class="btn btn-primary mb-2" value="Send">
                                             </div>
-                                            <div class="card-body">
-                                            <?php echo $row['Description']; ?> 
-                                            <hr>
-                                            <a href="dashboard.php?idyes=<?php echo $row['sid']?>" class="btn btn-primary">yes i will Attend</a> 
-                                            <a href="dashboard.php?idno=<?php echo $row['sid']?>" class="btn btn-danger">No Attend</a>
-                                            </div>
-                                           
-                                        </div>
-                                        <?php
-                                            $number+=1;
-                                            }
-                                        ?>
+                                        </form>    
                                     </div>
-                                    <br><br><br>
-                                    <hr>
-                                    <a href="comment.php" class="btn btn-success">askfor help</a>
+                                
                             </div>
                         </div>
 

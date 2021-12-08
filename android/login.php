@@ -1,6 +1,6 @@
 
 <?php require_once('includes/config.php'); 
-
+session_start();
 if (isset($_POST['loginbtn'])) {
 	$emailtxt = $_POST['email'];
 	$passtxt = $_POST['password'];
@@ -14,7 +14,7 @@ if (isset($_POST['loginbtn'])) {
 			if (password_verify(mysqli_real_escape_string($con, trim($_POST['password'])),$db_password)){
 				// lest set the sessions here!!!
 			$_SESSION['user_id']=$row['uid'];
-			$_SESSION['fname']=$row['Firstname'];
+			$_SESSION['email']=$row['email'];
 			$_SESSION['lname']=$row['Lastname'];
 
 			// then after creating sessions lests redirect
@@ -48,7 +48,7 @@ if (isset($_POST['loginbtn'])) {
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Admin Login</title>
+    <title>user Login</title>
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
